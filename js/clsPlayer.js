@@ -1876,9 +1876,11 @@ clsPlayer.prototype.SetBulleting = function (tmpWpnID, lp) {
     var self = this;
     self.bp.weapon_use_Time[tmpWpnID]++;
 
-    if (tmpWpnID >= 2 && !self.MountWeapons[tmpWpnID].bullet.missileFlg) {
-        ScreenUpdater.cam2Enable = true;
-        ScreenUpdater.cam3Enable = true;
+    if (self.bp.id === 0) {
+        if (tmpWpnID >= 2 && !self.MountWeapons[tmpWpnID].bullet.missileFlg) {
+            ScreenUpdater.cam2Enable = true;
+            ScreenUpdater.cam3Enable = true;
+        }
     }
 
     //アニメーションの終了を検知し、つぎのモーションへ。

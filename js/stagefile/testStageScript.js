@@ -1083,9 +1083,7 @@ function stageUpdater() {
 
                 if (oreCommon.sceneCom_TempV3.length() < 100) {
                     ScreenUpdater.nowSceneID = testStageScript.enumSceneSpan.Bt01;
-
-                    //ScreenUpdater.nowSceneID = testStageScript.enumSceneSpan.Bt06B;
-
+                    
                     ScreenUpdater.initScreenMsg();
                     ScreenUpdater.DisplayInfoText = "PASSING WP 4";
                     ScreenUpdater.DisplayInfoType = cEnConsts_DisplayInfoType.EmInfo_w;
