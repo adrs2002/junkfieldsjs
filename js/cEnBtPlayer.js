@@ -592,3 +592,17 @@ cEnConsts_DisplayInfoType
         infCol_b: 800,
         EmInfo_b: 801,  //クリア表示専用：青背景に白地
     }
+
+cEn_CommonVoiceType
+    = {
+        Rw_normal: 0,
+        Rw_high: 1,
+
+        Lw_nowmal: 10,
+
+        Sw_Magnum: 100,
+        Sw_Snype: 150,
+
+        tgtContact:200,
+
+    }

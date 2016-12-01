@@ -186,6 +186,8 @@ ScreenUpdater.stageMainUpdater = function () {
     }
 
     ScreenUpdater.LastMouseMoment.set(0, 0);
+
+    oreCommon.CommonCV_interval += oreCommon.dulTime;
     //ScreenUpdater.nowInputs.init();
     if (stageUpdater != null) { stageUpdater(); }
 
@@ -521,7 +523,10 @@ ScreenUpdater.viewBrefingMessage = function () {
     }
 
     if (nowText == null || nowText === "") { return; }
-    var nowLength = (Math.min(ScreenUpdater.scene_spanTime * 0.2, nowText.length)) ^ 0;
+
+    var lengthFactor = 0.3;
+    if (oreCommon.nowLang == 1) { lengthFactor *= 1.5; }
+    var nowLength = (Math.min(ScreenUpdater.scene_spanTime * lengthFactor, nowText.length)) ^ 0;
 
     //文字背景ボックス
     var widthHarf = Math.min(harf_W - 100, 320);
@@ -546,7 +551,10 @@ ScreenUpdater.viewStagegMessage = function () {
     }
 
     if (nowText == null || nowText === "") { return; }
-    var nowLength = (Math.min(ScreenUpdater.msgView_small * 0.2, nowText.length)) ^ 0;
+
+    var lengthFactor = 0.3;
+    if (oreCommon.nowLang == 1) { lengthFactor *= 1.5; }
+    var nowLength = (Math.min(ScreenUpdater.msgView_small * lengthFactor, nowText.length)) ^ 0;
 
     if (time_stage[ScreenUpdater.msgViewKey] > ScreenUpdater.msgView_small && nowLength > 0) {
 

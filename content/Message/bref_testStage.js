@@ -36,7 +36,7 @@ var txt_bref_e = {
     "Brf00_001": "Due to pressing circumstances, I'll be issuing an emergency briefing.",
     "Brf00_002": "Allied Cargo was shot down by Enemy's SAM.\r\nThere's supplies airlifting to the troops.",
     "Brf00_003": "They went missing in 60km north of Fureshum-city. /r/nSo impossible to landing.",
-    "Brf00_004": "Your mission is search-and-rescue operation for Cargo.\r\nThe surrounding area is a neutral point, It'll probably combat search-and-rescue operation.",
+    "Brf00_004": "Your mission is search-and-rescue operation for Cargo.\r\nThe surrounding area is a neutral point,\r\nIt'll probably combat search-and-rescue operation.",
     "Brf00_005": "Alpha, your mission is search cargo and help out the wounded. \r\nBravo, your mission is guard the area.",
     "Brf00_006": "Bravo, you go out first for securing the area.\r\nAfter securing the area, Alpha move on and handle the direct rescue."
 

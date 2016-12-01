@@ -778,6 +778,9 @@ testStageScript.LoadContent2 = function () {
 //ステージ個別の初期状態（リセット状態）をココでセットする
 //ここはステージが変わらない限り、一度しか走らない！
 testStageScript.stageInit_individually = function () {
+
+    oreCommon.downloadScript('content/cv/commonVoice.js', null);
+
     threeComps.scene.fog = new THREE.Fog(0x100020, 750, 1500);
     threeComps.scene.add(new THREE.AmbientLight(0x333344));
     //threeComps.scene_back.add(new THREE.AmbientLight(0x999999));
@@ -832,7 +835,7 @@ testStageScript.stageInit_individually = function () {
 
 ///ステージ初期化（ここは再スタート毎に何回でも走る）
 testStageScript.stageInit_reStart = function () {
-
+    oreCommon.canPlayCommonCV = false; 
     oreCommon.changeBGM('content/bgm_mp3/Battle.mp3');
     ScreenUpdater.stage_Initting();
 
@@ -1062,6 +1065,7 @@ function stageUpdater() {
     switch (ScreenUpdater.nowSceneID) {
 
         case testStageScript.enumSceneSpan.Bt00:
+            oreCommon.canPlayCommonCV = false; 
             testStageScript.setPlayer2WP();
             oreBt2DSceneCom.getMissionInfoText("Bt00");
             if (ScreenUpdater.msgView_big <= 3) {
@@ -1084,6 +1088,8 @@ function stageUpdater() {
                 if (oreCommon.sceneCom_TempV3.length() < 100) {
                     ScreenUpdater.nowSceneID = testStageScript.enumSceneSpan.Bt01;
                     
+                    //ScreenUpdater.nowSceneID = testStageScript.enumSceneSpan.Bt06B;
+
                     ScreenUpdater.initScreenMsg();
                     ScreenUpdater.DisplayInfoText = "PASSING WP 4";
                     ScreenUpdater.DisplayInfoType = cEnConsts_DisplayInfoType.EmInfo_w;
@@ -1096,6 +1102,7 @@ function stageUpdater() {
             break;
 
         case testStageScript.enumSceneSpan.Bt01:
+            oreCommon.canPlayCommonCV = false; 
             testStageScript.setPlayer2WP();
             oreBt2DSceneCom.getMissionInfoText("Bt01");
             if (ScreenUpdater.msgView_big <= 6) {
@@ -1120,6 +1127,7 @@ function stageUpdater() {
             break;
 
         case testStageScript.enumSceneSpan.Bt02:
+            oreCommon.canPlayCommonCV = false; 
             oreBt2DSceneCom.getMissionInfoText("Bt02");
             if (ScreenUpdater.msgView_big < 100) {
                 if (ScreenUpdater.msgView_big <= 5) {
@@ -1244,6 +1252,7 @@ function stageUpdater() {
             }
             else {
                 //敵全滅で次シーンへ
+                oreCommon.canPlayCommonCV = true; 
                 if (ScreenUpdater.getArriveCount(ScreenUpdater.etcObject) === 0) {
                     //更に増援
                     ScreenUpdater.nowSceneID = testStageScript.enumSceneSpan.m_EnemyWave2;
@@ -1281,6 +1290,7 @@ function stageUpdater() {
                 oreCommon.isGameCleared = true;
                 ScreenUpdater.NextSceneID = testStageScript.enumSceneSpan.Bt99;
                 setVisible_elm('messageSkip', true);
+                oreCommon.canPlayCommonCV = false; 
             }
             break;
 

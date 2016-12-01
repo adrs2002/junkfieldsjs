@@ -62,6 +62,8 @@ var cv_bref_load = false;
 
 oreCommon.BrefingScene = null;  //このブリーフィングシーンは、全ブリーフィング共通で使われる（その都度初期化される）設計
 
+oreCommon.canPlayCommonCV = false;  //共用攻撃時CVを再生していいかどうかのフラグ
+
 ///共通で必要なものの初期化
 oreCommon.commonInit = function () {
 
@@ -375,6 +377,48 @@ oreCommon.changeBGM = function (file) {
         oreCommon.nowBGM.play();
     }
 }
+
+oreCommon.CommonCV_interval =0;
+
+oreCommon.PlayCommonCV = function (_playerId, cvType) {
+    if (!oreCommon.canPlayCommonCV || !cv_Cpmmon_a_load || oreCommon.CommonCV_interval < 1000) { return; }
+
+    if(Math.random() < 0.6){return;}
+
+    var voiceID = "";
+    switch (cvType) {
+        case cEn_CommonVoiceType.Rw_normal:
+            switch (_playerId) {
+                case 0:
+                    voiceID = "p1_atk_" + oreMath.GetRamdomParInt(2);
+                    break;
+                case 1:
+                    voiceID = "p2_atk_0"; // + oreMath.GetRamdomParInt(5);
+                    break;
+            }
+            break;
+
+        case cEn_CommonVoiceType.Lw_nowmal:
+            switch (_playerId) {
+                case 0:
+                    voiceID = "p1_atk_L_" + oreMath.GetRamdomParInt(2);
+                    break;
+                case 1:
+                    voiceID = "p2_atk_L_";  + oreMath.GetRamdomParInt(3);
+                    break;
+            }
+            break;
+    }
+
+    if (voiceID != "" && VcOjs_Cpmmon_a[voiceID] != null) {
+        oreCommon.playAudio_CV(VcOjs_Cpmmon_a[voiceID], true);
+        oreCommon.CommonCV_interval =0;
+    }
+}
+
+
+
+
 
 oreCommon.setAudioVolume = function (obj, val) {
     if (obj != null) {

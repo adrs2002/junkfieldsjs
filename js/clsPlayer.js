@@ -1231,6 +1231,15 @@ clsPlayer.prototype.Update = function () {
                         //self.bp.WpnLockedTgt.push(self.bp.CullentLockTgt);
                         self.bp.LockingInterval = 1;
 
+                        //攻撃時CV再生
+                        if (self.bp.id < 2) {
+                            switch (tmpWpnID) {
+                                case 0: oreCommon.PlayCommonCV(self.bp.id, cEn_CommonVoiceType.Rw_normal); break;
+                                case 1: oreCommon.PlayCommonCV(self.bp.id, cEn_CommonVoiceType.Lw_nowmal); break;
+                                //case 2: oreCommon.PlayCommonCV(self.bp, cEn_CommonVoiceType.Rw_normal); break;
+                                //case 3: oreCommon.PlayCommonCV(self.bp, cEn_CommonVoiceType.Rw_normal); break;
+                            }
+                        }
                     } else {
                         //打とうとしてるけど打てなかったのがココ
                     }

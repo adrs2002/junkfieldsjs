@@ -511,14 +511,14 @@ oreMath.GetYosokuPos = function (BasePos, TgtObj, speed) {
     //予測地点の地形を考慮する
 
     var tmpgloundflg = false;
-/*
-    if (AllMain.CurrentScreen.BtScreen.BT_Players[TgtID].GldOn[1])
-    {
-        //地形考慮
-        var L_temp_Y = oreCommon.GetPosHeight(nv) + TgtObj.CenterPos.y;
-        if (L_temp_Y > nv.y) { nv.y = L_temp_Y; }
-    }
-*/
+    /*
+        if (AllMain.CurrentScreen.BtScreen.BT_Players[TgtID].GldOn[1])
+        {
+            //地形考慮
+            var L_temp_Y = oreCommon.GetPosHeight(nv) + TgtObj.CenterPos.y;
+            if (L_temp_Y > nv.y) { nv.y = L_temp_Y; }
+        }
+    */
     return new THREE.Vector4(nv.x, nv.y, nv.z, f);
 }
 
@@ -721,3 +721,16 @@ oreMath.MoveRolVectByInt = function (nowMoveInt) {
     }
 }
 
+
+///ランダムで値を得る（整数）
+oreMath.GetRamdomParInt = function (_count) {
+    if (_count <= 1) { return 0; }
+    var nowRand = Math.random();
+    var countPow = 1.0 / _count;
+    var roopCount = 1;
+    while (true) {
+        if (nowRand < countPow * roopCount) { break; }
+        else { roopCount++; }
+    }
+    return roopCount -1;
+}
