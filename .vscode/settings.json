@@ -1,0 +1,7 @@
+// 既定の設定とユーザー設定を上書きするには、このファイル内に設定を挿入します
+{
+  /*  "editor.fontFamily": "'Migu 1M'",*/
+  "editor.renderWhitespace": "all",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true
+}

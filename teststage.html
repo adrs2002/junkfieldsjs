@@ -1,0 +1,723 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>JunkFields Rebone Website</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta charset="utf-8" />
+
+	<style>
+		body {
+			user-select: none;
+			font-family: Inconsolata, Monospace, serif;
+			background-color: #000;
+			color: #fff;
+			margin: 0px;
+			overflow: hidden;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+		
+		a:link {
+			color: #aaffff;
+		}
+		
+		a:visited {
+			color: #aaaaff;
+		}
+		
+		a:hover {
+			color: #ffffff;
+		}
+		
+		a:active {
+			color: #aaffff;
+		}
+		
+		#info {
+			color: #fff;
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			display: block;
+		}
+		
+		#info a,
+		.button {
+			color: #f00;
+			font-weight: bold;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		
+		header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 10;
+			width: 100%;
+			height: 100px;
+		}
+		
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 11;
+			width: 100%;
+			height: 100px;
+		}
+		
+		#contents {
+			padding-top: 0px;
+			margin-top: 100px;
+			height: auto;
+			padding-bottom: 0px;
+			margin-bottom: 100px;
+		}
+		
+		#dialogback {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+			opacity: 0.75;
+		}
+		
+		div[id^="dialog_"].active {
+			width: 75%;
+			height: 75%;
+		}
+		
+		div[id^="dialog_"] {
+			position: absolute;
+			border-radius: 6px 6px 6px 6px;
+			left: 10%;
+			top: 7.5%;
+			width: 1%;
+			height: 1%;
+			background-color: #030;
+			opacity: 0.9;
+			box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.4);
+			/* CSS3 */
+			padding: 50px;
+			transition-property: width, height;
+			transition-duration: 200ms;
+			transition-timing-function: linear;
+		}
+		
+		div[id^="dialogBody_"].active {
+			display: inherit;
+			visibility: visible;
+		}
+		
+		div[id^="dialogBody_"] {
+			display: none;
+			visibility: hidden;
+			transition-property: visibility;
+			transition-duration: 300ms;
+			transition-timing-function: linear;
+		}
+		
+		td {
+			font: 14pt bold;
+			padding: 5px;
+		}
+		
+		.td_L {
+			text-align: right;
+		}
+		
+		.td_header {
+			font: 16pt bold;
+			background-color: #007;
+			color: #fff;
+		}
+		
+		table {
+			margin-left: auto;
+			margin-right: auto;
+			border-collapse: collapse;
+		}
+		
+		.button_wrapper {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			z-index: 2111;
+			width: 100%;
+			height: 100px;
+			text-align: center;
+		}
+		
+		input[type="button"] {
+			width: 200px;
+			height: 40px;
+			background-color: green;
+			color: white;
+			border: 1px solid lightgreen;
+			font-size: 12pt;
+			font-weight: normal;
+		}
+		
+		input[type="button"]:hover {
+			color: white;
+			background-color: #094;
+			border: 2px solid cyan;
+			padding: 3px;
+		}
+		
+		input[type="button"].select {
+			background-color: cyan;
+			color: #007;
+			border: 1px solid blue;
+			font-weight: bold;
+		}
+		
+		#buttonbox {
+			width: 100%;
+			height: 50px;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 51;
+		}
+		
+		#buttonbox td {
+			text-align: center;
+			vertical-align: top;
+		}
+		
+		.small {
+			font: 10pt bold;
+		}
+		
+		table[id^="tb_tu_"] tr {
+			border-bottom: 1px #094 solid;
+		}
+		
+		table[id^="tb_missionList_"] td {
+			font-weight: bold;
+			padding: 10px;
+		}
+		
+		.tr_mission_unsel {
+			border-bottom: 1px #094 solid;
+		}
+		
+		.tr_mission_unsel:hover {
+			color: white;
+			background-color: #094;
+			padding: 3px;
+		}
+		
+		.tr_mission_sel {
+			background-color: cyan;
+			color: #007;
+			border: 1px solid blue;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header>JunkFields Rebone testStage Program </header>
+	<div id="contents"></div>
+	<footer>
+
+	</footer>
+
+	<div id="canvase3d" style="position:fixed; top:0px; left:0px; width:100%; height:100%; z-index: 1; background-color: #000000;"></div>
+	<!-- 3D描画領域のためのdiv要素を配置 -->
+	<canvas id="canvase2d" style="position:fixed; top:0px; left:0px; width:100%; height:100%; z-index: 100; background-color:rgba(0,0,0,0);"></canvas>
+	<!-- その真上に、2D描画領域のためのdiv要素を配置 -->
+
+
+	<div id="dialogback" style="z-index:2000; display:none;"></div>
+	<!--スタッフダイアログ-->
+	<div id="dialog_Staff" class="dialog_body" style="z-index:2001; display:none;">
+		<div id="dialogBody_Staff">
+			<table>
+				<tr>
+					<td class="td_L">Program＆3D-model create：</td>
+					<td><a href="https://twitter.com/adrs2002" target="_new"> Jey-en </a></td>
+				</tr>	<tr>
+					<td class="td_L">Mechanic Design：</td>
+					<td>yoshimi-13</td>
+				</tr>
+				<tr>
+					<td style="margin-top:10px"></td>
+				</tr>
+				<tr>
+					<td class="td_L">Bravo 1：</td>
+					<td><a href="http://hisagitei.aki.gs/" target="_new"> 飛鷺 銀 </a></td>
+				</tr>
+				<tr>
+					<td class="td_L">Bravo 2：</td>
+					<td><a href="https://tmbox.net/user/perceval_fc3s" target="_new"> 加賀美 祥 </a></td>
+				</tr>
+				<tr>
+					<td class="td_L">Alpha 1：</td>
+					<td><a href="https://twitter.com/akiralinnk" target="_new"> AKIRA </a></td>
+				</tr>
+				<tr>
+					<td class="td_L">Big-Ear 1：</td>
+					<td><a href="http://xd304617.html.xdomain.jp/" target="_new"> 岡松 丈 </a></td>
+				</tr>
+				<tr>
+					<td class="td_L">Big-Ear 2：</td>
+					<td><a href="http://yukisanpo.kyarame.com/" target="_new"> 雪城あゆむ </a></td>
+				</tr>
+				<tr>
+					<td>　</td>
+				</tr>
+				<tr>
+					<td class="td_L">Enemy 1：</td>
+					<td><a href="http://tetsuya.art-studio.cc" target="_new"> 哲也 </a></td>
+				</tr>
+				<tr>
+					<td class="td_L">Enemy 2：</td>
+					<td> 逢千 鏡介 </td>
+				</tr>
+				<tr>
+					<td>　</td>
+				</tr>
+				<tr>
+					<td class="td_L">BGM：</td>
+					<td><a href="http://www.presence-of-music.com/index.html" target="_new"> Presence of Music </a></td>
+				</tr>
+				<tr></tr>
+			</table>
+			<br><br><br>
+			<em>免責事項：</em><br> 　ほら、アレだよ。いつもの。このソフトやサイトにアクセスして万が一熱暴走とかしても当方一切責任なんかとらねーぞとか、ああいうやつな。
+			<br><br><em>Legal Notices：</em><br>　Oh Yes. I am japanease yellow monkey. <br>
+			<br>これって何？：<a href="https://threejs.org/" target="new">【Three.js】</a>の習熟を目的として作られた、JavaScript100％のテストゲーム。今後の発展の予定は一切ありません。
+			<br>
+			<br>
+
+			<div class="button_wrapper" id="closediv_staff" style="display:none;">
+				<input type="button" onclick="closeDialog('Staff');" value="close">
+			</div>
+
+			<div class="button_wrapper" id="closediv_restart" style="display:none;">
+				<input type="button" onclick=" game_end();" value="View Source(GitHub)">
+
+				<input type="button" onclick=" game_Restart();" value="ReStart">
+				<input type="button" onclick=" game_end();" value="End">
+			</div>
+
+		</div>
+	</div>
+
+	<!--設定ダイアログ-->
+	<div id="dialog_Setting" class="" style="z-index:2002; display:none;">
+		<div id="dialogBody_Setting">
+			<table>
+				<tr>
+					<td class="td_header" colspan="2">Sound Volumes</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="td_L">Charactor Voice Volume：</td>
+					<td><input type="range" id="vol_cv" min="0" max="1.0" step="0.05" value="1.0" onchange="oreCommon.changeVolumeBase(this.value, 'cv');"></td>
+				</tr>
+				<tr>
+					<td class="td_L">Sound Effect Volume：</td>
+					<td><input type="range" id="vol_se" min="0" max="1.0" step="0.05" value="1.0" onchange="oreCommon.changeVolumeBase(this.value, 'se');"></td>
+				</tr>
+				<tr>
+					<td class="td_L">BGM Volume：</td>
+					<td><input type="range" id="vol_bgm" min="0" max="1.0" step="0.05" value="1.0" onchange="oreCommon.changeVolumeBase(this.value, 'bgm');"></td>
+				</tr>
+				<tr>
+					<td>　</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td class="td_L td_header">Language (text)</td>
+					<td><input type="button" id="langbtn_jp" onclick="changeLang(0)" value="日本語"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="button" id="langbtn_en" onclick="changeLang(1)" value="English"></td>
+				</tr>
+			</table>
+			<div class="button_wrapper">
+				<input type="button" onclick="closeDialog('Setting');" value="close">
+			</div>
+		</div>
+	</div>
+
+	<!--解説ダイアログ：移動-->
+	<div id="dialog_tu_move" class="dialog_body" style="z-index:2003; display:none;">
+		<div id="dialogBody_tu_move">
+			<table id="tb_tu_j">
+				<tr>
+					<td class="td_header" colspan="2">基本操作</td>
+				</tr>
+				<tr>
+					<td class="td_L">マウス移動</td>
+					<td>視点の操作</td>
+				</tr>
+				<tr>
+					<td class="td_L">Wキー</td>
+					<td>前進</td>
+				</tr>
+				<tr>
+					<td class="td_L">Sキー</td>
+					<td>後退</td>
+				</tr>
+				<tr>
+					<td class="td_L">Aキー</td>
+					<td>左移動</td>
+				</tr>
+				<tr>
+					<td class="td_L">Dキー</td>
+					<td>右移動</td>
+				</tr>
+				<tr>
+					<td class="td_L">Shift または Ctrl</td>
+					<td>ブースター</td>
+				</tr>
+				<tr>
+				</tr>
+				<tr>
+					<td class="td_header" colspan="2">攻撃動作</td>
+				</tr>
+				<tr>
+					<td class="td_L">左ボタン<br><span class="small">（遠距離）</span>
+						<br>
+					</td>
+					<td>キャノン砲</td>
+				</tr>
+				<tr>
+					<td class="td_L">左ボタン<br><span class="small">（近距離）</span>
+					</td>
+					<td>マシンガン<br><span class="small">（自動切り替え）</span></td>
+				</tr>
+				<tr>
+					<td class="td_L">右ボタン１</td>
+					<td>ミサイル <br>
+						<span class="small">押し続けでロック増加(最大4)<br> 離すと発射</span></td>
+				</tr>
+				<tr>
+					<td class="td_L">右ボタン２</td>
+					<td>遠距離大型キャノン砲
+						<br><span class="small">押し続けでズーム：離すと発射</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="td_L"><span class="small">マウスホイール：</span></td>
+					<td><span class="small">右ボタン使用武器の切り替え</span></td>
+				</tr>
+			</table>
+			<!--=====-->
+			<table id="tb_tu_e">
+				<tr>
+					<td class="td_header" colspan="2">Basic Move</td>
+				</tr>
+				<tr>
+					<td class="td_L">Mouse Move</td>
+					<td>Movement point of view</td>
+				</tr>
+				<tr>
+					<td class="td_L">W key</td>
+					<td>Move Forward</td>
+				</tr>
+				<tr>
+					<td class="td_L">S key</td>
+					<td>Move Back</td>
+				</tr>
+				<tr>
+					<td class="td_L">A key</td>
+					<td>Move Left</td>
+				</tr>
+				<tr>
+					<td class="td_L">D key</td>
+					<td>Move Right</td>
+				</tr>
+				<tr>
+					<td class="td_L">Shift or Ctrl</td>
+					<td>Use Booster</td>
+				</tr>
+				<tr>
+				</tr>
+				<tr>
+					<td class="td_header" colspan="2">How to Attack</td>
+				</tr>
+				<tr>
+					<td class="td_L">Left Button <br><span class="small">(Out Range)</span>
+						<br>
+					</td>
+					<td>Hand Cannon</td>
+				</tr>
+				<tr>
+					<td class="td_L">Left Button<br><span class="small">(Close Range)</span>
+					</td>
+					<td>Machine-Gun<br><span class="small">(Auto Change)</span></td>
+				</tr>
+				<tr>
+					<td class="td_L">Right Button 1</td>
+					<td>Missile<br>
+						<span class="small">Hold Press:Add Lock-On<br>Release:firing.</span></td>
+				</tr>
+				<tr>
+					<td class="td_L">Right Button 2</td>
+					<td>Long Range Chanon
+						<br><span class="small">Hold Press:Zoom-in<br>Release:firing.</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="td_L"><span class="small">mouse wheel：</span></td>
+					<td><span class="small">Change Right-button Weapon</span></td>
+				</tr>
+			</table>
+
+			<div class="button_wrapper">
+				<input type="button" onclick="closeDialog('tu_move');" value="close">
+			</div>
+		</div>
+	</div>
+
+	<!--解説ダイアログ：ブースト-->
+	<div id="dialog_tu_boost" class="dialog_body" style="z-index:2003; display:none;">
+		<div id="dialogBody_tu_boost">
+			<table id="tb_tu2_j">
+				<tr>
+					<td class="td_header" >ブースト移動</td>
+				</tr>
+				<tr>
+					<td >Wキー（前進）を押しながら　Shiftキー　を押すことで、<br>
+					高速なブースト移動をすることができます。<br>
+					△の目標地点まで移動しましょう。<br>
+					<br>
+								<img src="content/htmlimage/barniause.gif">
+					</td>					
+				</tr>	
+					<tr>
+					<td ></td>
+				</tr>			
+			</table>
+			<!--=====-->
+			<table id="tb_tu2_e">
+				<tr>
+					<td class="td_header" >Booster Move</td>
+				</tr>
+				<tr>
+					<td >W key + Shift key, Start-up Booster.<br>
+					That's High-speed move.<br>
+					Move to marker △.<br>
+					<br>
+								<img src="content/htmlimage/barniause.gif"></td>
+				</tr>	
+					<tr>
+					<td >
+
+					</td>
+				</tr>			
+			</table>
+
+			<div class="button_wrapper">
+				<input type="button" onclick="closeDialog('tu_boost');" value="close">
+			</div>
+		</div>
+	</div>
+	<!--====================---->
+
+	<!--ミッションリストダイアログ-->
+	<div id="dialog_mission" class="" style="z-index:2005; display:none;">
+		<div id="dialogBody_mission">
+			<table style="width: 100%">
+				<tr>
+					<td class="td_header" colspan="2">Mission Select</td>
+					<td></td>
+				</tr>
+			</table>
+			<br>
+			<table id="tb_missionList_j">
+			</table>
+
+			<table id="tb_missionList_e">
+			</table>
+
+			<div class="button_wrapper">
+				<input type="button" id="launch_j" onclick="start_mission();" value="出撃">
+				<input type="button" id="launch_e" onclick="start_mission();" value="Launch">
+				<input type="button" onclick="closeDialog('mission');" value="Close">
+			</div>
+		</div>
+	</div>
+
+
+	<!--==================================================================================-->
+	<div id="buttonbox">
+		<table>
+			<td style="width:30%">
+				<input type="button" onclick="ShowDialog('Setting');" value="GameConfig">
+			</td>
+			<td style="width:40%">
+				<input type="button" onclick="ShowDialog('tu_move');" value="Tutorial">
+			</td>
+			<td style="width:30%">
+				<input type="button" onclick="ShowDialog('Staff');" value="作ったひと">
+			</td>
+		</table>
+	</div>
+
+	<!--==================================================================================-->
+	<div id="beginButton" style="position: absolute; top: 60%; width:100%; height:30%; z-index:1001; text-align: center;">
+		Language<br><br>
+		<input type="button" id="langbtn_jp2" style="height:30px" value="日本語" onclick="changeLang(0);">
+		<input type="button" id="langbtn_en2" style="height:30px" value="English" onclick="changeLang(1);">
+		<br><br><br><br>
+		<input type="button" value="Start" onclick="getMissionList();">
+	</div>
+	<!--==================================================================================-->
+	<div id="pinterLockUse" style="position: absolute; top: 50px; width:100%; height:50px; z-index:1001; text-align: center; visibility:hidden;">
+		<input type="button" style="width:300px" value="ガチモード(TPS GAME MODE)" onclick="beginPointerLock();">
+	</div>
+
+	<div id="messageSkip" style="position: absolute; bottom:20%; width:100%; height:50px; z-index:1001; text-align: center; visibility:hidden;">
+		<input type="button" style="width:300px" value="Message Skip" onclick="messageSkip();">
+	</div>
+	<!------------------------------------------------------------------------>
+
+	<script src="js/three.min.js"></script>
+	<script src="js/loaders/thrXfileLoader.js?var=hoges"></script>
+
+	<script src="js/postprocessing/EffectComposer.js"></script>
+	<script src="js/postprocessing/RenderPass.js"></script>
+	<script src="js/postprocessing/MaskPass.js"></script>
+	<script src="js/postprocessing/ShaderPass.js"></script>
+	<script src="js/shaders/CopyShader.js"></script>
+	<script src="js/shaders/FXAAShader.js"></script>
+	<script src="js/shaders/ConvolutionShader.js"></script>
+	<script src="js/shaders/LuminosityHighPassShader.js"></script>
+	<script src="js/postprocessing/UnrealBloomPass.js"></script>
+	<script src="js/libs/dat.gui.min.js"></script>
+
+	<script src="js/libs/stats.min.js"></script>
+
+	<!--==Three.js絡みがここまで。既に大杉じゃね==-->
+
+	<script src="js/clsConst.js"></script>
+	<script src="js/oreMath.js"></script>
+	<script src="js/cEnBtPlayer.js"></script>
+
+	<script src="js/screenUpdater.js"></script>
+	<script src="js/threecomps.js"></script>
+	<script src="js/oreCommon.js"></script>
+	<script src="js/clsParticle.js"></script>
+
+	<script src="js/titleScreenScript.js"></script>
+	<script src="js/index_ui.js"></script>
+	<script src="content/commonSounds.js" async></script>
+
+	<script>	
+			window.addEventListener("load",function(e){
+  			changeLang(0);
+				masterInitting();
+			},false);
+
+    </script>
+
+
+
+	<script id="indexObj_vs" type="x-shader/x-vertex">
+        varying vec2 vUv;
+        varying vec4 addcolor;
+
+        attribute vec3 adduv;
+        attribute vec3 addsize3d;
+        attribute vec3 translation;
+        attribute vec4 ptcol;
+        attribute vec3 addvect;
+
+        void main()
+        {
+            //インスタンス化＆回転角を反映するシェーダー
+
+            //テクスチャのUV位置
+            vUv.x = uv.x + adduv.x;
+            vUv.y = uv.y + adduv.y;
+
+            //元頂点を拡大縮小させた位置を算出(Z位置は、モデル読み込みの都合上反転させている)
+            vec3 p = vec3(position.x,position.y,-position.z) * addsize3d;
+
+            //適当すぎるZ軸回転
+            mat4 rolZ =  mat4( -cos(translation.z + translation.x),sin(translation.z + translation.x),0,0,
+            -sin(translation.z + translation.x),-cos(translation.z + translation.x),0,0,
+            0,0,1,0,
+            0,0,0,1);
+
+            //X,Y(pich,yaw)は進行方向に向かせる
+            vec3 dotV = cross(addvect,vec3(0,1,0));
+            mat4 tmpMx = mat4( dotV.x, dotV.y, dotV.z, 0,
+            0, 1, 0, 0,
+            addvect.x,addvect.y,addvect.z, 0,
+            0, 0, 0, 1);
+
+            //Zと進行方向の回転を合わせる
+            tmpMx = tmpMx * rolZ;
+            vec4 tmpP =  tmpMx * vec4(p, 1.0);
+
+            //「回転させた頂点」を、「描画対象（インスタンス対象位置）」に移動
+            tmpP = tmpP + vec4(translation, 0.0);
+
+            //ビューマトリックス変換して、確定
+            vec4 mvPosition = modelViewMatrix * tmpP;
+            gl_Position = projectionMatrix * mvPosition;
+
+            //色の変化
+            addcolor = ptcol;
+
+        }
+    </script>
+
+	<script id="indexbill_vs" type="x-shader/x-vertex">
+        varying vec2 vUv;
+        varying vec4 addcolor;
+        attribute vec2 adduv;
+        attribute float addsize;
+        attribute vec3 translation;
+        attribute vec4 ptcol;
+
+        //attribute mat4 exmat;
+
+        void main()
+        {
+            //インスタンス化＆ビルボード化するシェーダー
+            //vUv = uv;
+            vUv.x = uv.x + adduv.x;
+            vUv.y = uv.y + adduv.y;
+
+            gl_Position = projectionMatrix * (modelViewMatrix * vec4(translation, 1) + vec4(position.xy * addsize , 0, 0));
+
+            addcolor = ptcol;
+        }
+    </script>
+
+	<script id="indexbill_fs" type="x-shader/x-fragment">
+        uniform sampler2D texture;
+        varying vec2 vUv;
+        varying vec4 addcolor;
+
+        void main()
+        {
+            gl_FragColor = texture2D(texture, vUv);
+            gl_FragColor.r = gl_FragColor.r * addcolor.r;
+            gl_FragColor.g = gl_FragColor.g * addcolor.g;
+            gl_FragColor.b = gl_FragColor.b * addcolor.b;
+						gl_FragColor.a = gl_FragColor.a * addcolor.a;
+        }
+    </script>
+
+</body>
+
+</html>

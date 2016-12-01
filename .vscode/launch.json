@@ -1,0 +1,44 @@
+{
+  "version": "0.1.0",
+  // ローカルにあるファイルをデバッグ
+  "configurations": [
+/*
+    {
+      // デバッグ設定の名称
+      "name": "Launch local file",
+      // デバッグ種別を指定（chrome/node/monoなど）
+      "type": "chrome",
+      // lanunchまたはattachを指定
+      "request": "launch",
+      // 読み込むHTMLファイルを指定（プロジェクトからのパスを指定）
+      "file": "${workspaceRoot}/teststage.html"
+    },
+*/
+  // Webサーバー上にあるファイルをデバッグ
+    {
+      // デバッグ設定の名称
+      "name": "Launch remote website with sourcemaps",
+      // デバッグ種別を指定（chrome/node/monoなど）
+      "type": "chrome",
+      // lanunchまたはattachを指定
+      "request": "launch",
+      // Webサーバー上にあるデバッグ対象のURLを指定
+      "url": " http://localhost:41475/teststage.html",
+      // マッピングするローカルファイルが配置されているディレクトリを指定
+      "webRoot": "${workspaceRoot}/",
+      // ソースマップの有効・無効の指定（true/false）
+      "sourceMaps": true,
+
+      "runtimeArgs" : ["--incognito"]
+    }
+    ,
+      //起動済みにアタッチ
+     {
+        "name": "Attach chrome",
+        "type": "chrome",
+        "request": "attach",
+        "port": 9222
+    }
+
+  ]
+}
